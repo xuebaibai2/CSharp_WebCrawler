@@ -1,0 +1,27 @@
+﻿@using WebCrawler.Models
+@model HtmlModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@Model.Result
+
+@using (@Html.BeginForm("Index","Home",FormMethod.Post))
+{
+    @Html.LabelFor(x=>x.url)
+    @Html.TextBoxFor(x=>x.url)
+    <br />
+
+    @Html.LabelFor(x=>x.Keyword)
+    @Html.TextBoxFor(x=>x.Keyword)
+    <br />
+
+    @Html.LabelFor(x=>x.Regex)
+    @Html.TextBoxFor(x=>x.Regex)
+    <div>
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+
+}

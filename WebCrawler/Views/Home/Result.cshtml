@@ -1,0 +1,21 @@
+﻿@using WebCrawler.Models
+@model HtmlModel
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Result</h2>
+<h3>Count: @Model.ResultList.Count</h3>
+@*@Html.DisplayFor(x=>x.Result)*@
+@{
+    foreach (string result in Model.ResultList)
+    {
+        if (result.Contains("thankq"))
+        {
+            <span>@result</span>
+            <br />
+        }
+
+    }
+}
+@*@Html.DisplayFor(x=>x.ResultList)*@
