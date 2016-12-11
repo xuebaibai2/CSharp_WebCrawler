@@ -12,7 +12,6 @@ namespace WebCrawler.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
         [HttpGet]
         public ActionResult Index()
         {
@@ -26,41 +25,38 @@ namespace WebCrawler.Controllers
         {
             WebClient wc = new WebClient();
             NameValueCollection nameValue = new NameValueCollection();
+            //nameValue.Add("wd", html.Keyword);
             nameValue.Add("q", html.Keyword);
             wc.QueryString.Add(nameValue);
             html.Result = wc.DownloadString(html.url);
 
             List<string> resultList = new List<string>();
             string regex = @"(<a\s.*?>)(.*?)(<\/a>)";
-
+            string hrefRegex = @"href=""([^ ""]*)""";
             Regex reg = new Regex(regex, RegexOptions.IgnoreCase);
 
             Match match = reg.Match(html.Result);
+
+            KeyValue keyValue = new KeyValue();
             while (match.Success)
             {
-                //match.Groups
-                html.ResultList.Add(match.ToString());
+                Regex hrefReg = new Regex(hrefRegex, RegexOptions.IgnoreCase);
+                keyValue.Key = match.Groups[2].Value;
+                keyValue.Value = hrefReg.Match(match.Groups[1].Value).Groups[1].Value;
+                if (keyValue.Value[0] == '/')
+                {
+                    keyValue.Value = "https://www.google.com.au" + keyValue.Value;
+                }
+                html.ValuePair.Add(keyValue);
                 match = match.NextMatch();
             }
 
-            return View("Result",html);
+            return View("Result", html);
         }
 
+        [HttpGet]
         public ActionResult Result(HtmlModel html)
         {
-            List<string> resultList = new List<string>();
-            //string regex = @"(<a\s+\w>)(\w*\W*\s*\S*\d*\D*)(</a>)";
-            string regex = @"<a\s+(?:[^>]*?\s+)?href=""([^ ""]*)";
-
-            Regex reg = new Regex(regex, RegexOptions.IgnoreCase);
-
-            Match match = reg.Match(html.Result);
-            while (match.Success)
-            {
-                html.ResultList.Add(match.ToString());
-                match = match.NextMatch();
-            }
-            
             return View(html);
         }
     }

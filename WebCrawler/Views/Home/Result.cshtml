@@ -5,17 +5,20 @@
 }
 
 <h2>Result</h2>
-<h3>Count: @Model.ResultList.Count</h3>
+<h3>Count: @Model.ValuePair.Count</h3>
 <br />
 <a href="/" class="btn btn-primary">Go back home</a>
 <br />
-@{
-    foreach (string result in Model.ResultList)
+<h3>Result</h3>
+
+<hr />
+@Model.Result
+@*<h3>Result Pair</h3>
+@{ 
+    foreach (KeyValue pair in Model.ValuePair)
     {
-        if (result.Contains(Model.Keyword))
-        {
-            <span>@result</span>
-            <br />
-        }
+        <span>@pair.Key : @pair.Value</span>
+        <a href="@pair.Value">@pair.Key</a>
+        <br />
     }
-}
+}*@
