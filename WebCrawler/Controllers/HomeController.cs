@@ -17,15 +17,13 @@ namespace WebCrawler.Controllers
         public ActionResult Index()
         {
             HtmlModel html = new HtmlModel();
+            html.url = "https://www.google.com.au/search";
             return View(html);
         }
 
         [HttpPost]
         public ActionResult Index(HtmlModel html)
         {
-            //html.Keyword = "thankq";
-            //html.url = "https://www.google.com.au/search";
-
             WebClient wc = new WebClient();
             NameValueCollection nameValue = new NameValueCollection();
             nameValue.Add("q", html.Keyword);
@@ -33,15 +31,14 @@ namespace WebCrawler.Controllers
             html.Result = wc.DownloadString(html.url);
 
             List<string> resultList = new List<string>();
-            string regex = @"<a\s.*?>.*?</a>";
-            //string regex = @"(<a\s+\w>)(\w*\W*\s*\S*\d*\D*)(</a>)";
-            //string regex = @"<a\s+(?:[^>]*?\s+)?href=""([^ ""]*)";
+            string regex = @"(<a\s.*?>)(.*?)(<\/a>)";
 
             Regex reg = new Regex(regex, RegexOptions.IgnoreCase);
 
             Match match = reg.Match(html.Result);
             while (match.Success)
             {
+                //match.Groups
                 html.ResultList.Add(match.ToString());
                 match = match.NextMatch();
             }
